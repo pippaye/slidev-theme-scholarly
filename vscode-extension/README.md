@@ -43,6 +43,15 @@ In Markdown files, Scholarly-specific suggestions now appear while typing (witho
 
 If suggestions do not pop up automatically, press `Ctrl+Space` (`Cmd+Space` on macOS if available) to trigger completion.
 
+### 🔗 Internal Anchors
+
+The Command Palette now includes:
+
+- `Insert Internal Anchor` to create a new anchor using `::anchor{#id}`, `{#id}`, or `id="id"`
+- `Insert Internal Anchor Reference` to pick an existing anchor from the current Markdown file and insert `#anchor-id`
+
+You can also type `ss-anchor` to insert a standalone anchor snippet.
+
 ### 👁️ Visual Previews (New)
 
 The extension now features a dedicated Preview panel. Simply click the eye icon (👁️) next to any Layout, Component, or Theme in the sidebar to view a high-quality visualization of how it looks in the rendered slides.
@@ -147,6 +156,7 @@ The `ss-*` prefixes are the canonical snippet names shown in completion. Legacy 
 | `ss-keywords-md` | Keywords component (Markdown syntax sugar) |
 | `ss-cite` | Parenthetical citation `@citekey` |
 | `ss-cite-n` | Narrative citation `!@citekey` |
+| `ss-anchor` | Standalone internal anchor `::anchor{#anchor-id}` |
 | `ss-bibliography` | Bibliography marker |
 | `ss-math-i` | Inline math |
 | `ss-math-b` | Math block |

@@ -14,7 +14,7 @@ We provide a VS Code extension to boost your productivity when creating Slidev p
 - 📝 **One-Click Insert** - Click any item in the panel to insert code at cursor position
 - 🚀 **New Presentation** - Create a new presentation with pre-configured template
 - 🎨 **Theme Presets** - Apply `themeConfig.colorTheme` / `themeConfig.fontTheme` from the Themes view
-- 📚 **References & Anchors** - BibTeX completion/hover plus internal-anchor completion and a unified References view
+- 📚 **References & Anchors** - BibTeX completion/hover, internal-anchor completion, a unified References view, and command-palette insertion for both anchor definitions and references
 - 🧪 **Dev Mode** - Built-in performance diagnostics with timing logs and slow-operation markers
 
 ## Installation
@@ -53,6 +53,15 @@ The extension also provides context-aware completion suggestions:
 - `ss-` / `scholarly-` -> built-in snippet candidates
 
 If suggestions are not shown automatically, use `Ctrl+Space` (or `Cmd+Space` on macOS if available).
+
+### Insert Internal Anchors
+
+The Command Palette now includes two dedicated anchor commands:
+
+- `Insert Internal Anchor` -> create a new anchor at the cursor using `::anchor{#anchor-id}`, `{#anchor-id}`, or `id="anchor-id"`
+- `Insert Internal Anchor Reference` -> pick an existing anchor from the current Markdown document and insert `#anchor-id`
+
+If you prefer snippets, type `ss-anchor` to insert a standalone anchor marker quickly.
 
 ### Dev Mode For Performance Testing
 
@@ -169,6 +178,7 @@ Note: if you enable `themeConfig.outlineToc: true` in frontmatter, the footer TO
 | `ss-highlight` | Text highlighting |
 | `ss-highlight-md` | Text highlighting (Markdown syntax sugar) |
 | `ss-cite` | BibTeX citation `@citekey` |
+| `ss-anchor` | Standalone internal anchor `::anchor{#anchor-id}` |
 | `ss-cite-comp` | Cite component (non-BibTeX) |
 | `ss-cite-md` | Cite component (Markdown syntax sugar) |
 | `ss-theme-preview` | ThemePreview component |

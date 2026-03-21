@@ -14,7 +14,7 @@ title: VS Code 插件
 - 📝 **一键插入/应用** - 点击面板中的项目即可插入内容或更新 frontmatter
 - 🚀 **新建演示** - 创建带有预配置模板的新演示文稿
 - 🎨 **主题预设** - 在 Themes 面板中一键应用 `themeConfig.colorTheme` / `themeConfig.fontTheme`
-- 📚 **参考文献与锚点** - BibTeX 引用补全/悬浮预览，加上内部锚点补全与统一的 References 面板
+- 📚 **参考文献与锚点** - BibTeX 引用补全/悬浮预览、内部锚点补全、统一的 References 面板，以及命令面板里的锚点创建/引用插入
 - 🧪 **Dev Mode** - 内置性能诊断，提供耗时日志与慢操作标记
 
 ## 安装方法
@@ -53,6 +53,15 @@ scholarly-cite # 插入引用
 - `ss-` / `scholarly-` -> 内置 snippet 候选
 
 如果没有自动弹出建议，可按 `Ctrl+Space`（macOS 也可使用 `Cmd+Space`，若未被系统占用）手动触发。
+
+### 插入内部锚点
+
+现在命令面板里有两个专门的锚点命令：
+
+- `Insert Internal Anchor` -> 在光标处创建新锚点，可插入 `::anchor{#anchor-id}`、`{#anchor-id}` 或 `id="anchor-id"`
+- `Insert Internal Anchor Reference` -> 从当前 Markdown 文档中选择已有锚点，并插入 `#anchor-id`
+
+如果你更喜欢代码片段，也可以直接输入 `ss-anchor`。
 
 ### 用于性能测试的 Dev Mode
 
@@ -169,6 +178,7 @@ scholarly-cite # 插入引用
 | `ss-highlight` | 文本高亮 |
 | `ss-highlight-md` | 文本高亮（Markdown 语法糖） |
 | `ss-cite` | BibTeX 引用 `@citekey` |
+| `ss-anchor` | 独立内部锚点 `::anchor{#anchor-id}` |
 | `ss-cite-comp` | Cite 组件（非 BibTeX） |
 | `ss-cite-md` | Cite 组件（Markdown 语法糖） |
 | `ss-theme-preview` | ThemePreview 组件 |

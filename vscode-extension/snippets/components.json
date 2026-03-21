@@ -280,6 +280,14 @@
     ],
     "description": "Insert narrative citation Author (Year)"
   },
+  "Slidev Scholarly: Internal Anchor": {
+    "prefix": ["scholarly-anchor", "ss-anchor"],
+    "body": [
+      "::anchor{#${1:anchor-id}}",
+      "$0"
+    ],
+    "description": "Insert a standalone internal anchor marker"
+  },
   "Slidev Scholarly: Multiple Citations": {
     "prefix": ["scholarly-cite-multi", "ss-cite-multi"],
     "body": [

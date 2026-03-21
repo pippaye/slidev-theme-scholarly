@@ -39,6 +39,8 @@
     "onCommand:slidev-scholarly.cliMenu",
     "onCommand:slidev-scholarly.toggleDevMode",
     "onCommand:slidev-scholarly.refreshReferences",
+    "onCommand:slidev-scholarly.insertInternalAnchor",
+    "onCommand:slidev-scholarly.insertAnchorReference",
     "onCommand:slidev-scholarly.preview"
   ],
   "main": "./out/extension.js",
@@ -115,6 +117,16 @@
         "icon": "$(quote)"
       },
       {
+        "command": "slidev-scholarly.insertInternalAnchor",
+        "title": "Insert Internal Anchor",
+        "icon": "$(symbol-key)"
+      },
+      {
+        "command": "slidev-scholarly.insertAnchorReference",
+        "title": "Insert Internal Anchor Reference",
+        "icon": "$(link)"
+      },
+      {
         "command": "slidev-scholarly.insertBibKey",
         "title": "Insert BibTeX Key",
         "icon": "$(add)"
@@ -181,6 +193,16 @@
           "command": "slidev-scholarly.refreshReferences",
           "when": "view == scholarly-references",
           "group": "navigation"
+        },
+        {
+          "command": "slidev-scholarly.insertAnchorReference",
+          "when": "view == scholarly-references",
+          "group": "navigation@2"
+        },
+        {
+          "command": "slidev-scholarly.insertInternalAnchor",
+          "when": "view == scholarly-references",
+          "group": "navigation@3"
         },
         {
           "command": "slidev-scholarly.applyThemePreset",
