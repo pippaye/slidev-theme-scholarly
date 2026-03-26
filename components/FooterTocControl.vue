@@ -597,6 +597,8 @@ onUnmounted(() => {
   position: relative;
   display: inline-flex;
   align-items: center;
+  padding-right: 0.18rem;
+  margin-right: 0.02rem;
 }
 
 .footer-toc-backdrop {
