@@ -1,8 +1,34 @@
 # Slidev 学术主题 (Scholarly Theme)
 
-[![NPM version](https://img.shields.io/npm/v/slidev-theme-scholarly?color=3AB9D4&label=)](https://www.npmjs.com/package/slidev-theme-scholarly)
-[![GitHub stars](https://img.shields.io/github/stars/jxpeng98/slidev-theme-scholarly?style=social)](https://github.com/jxpeng98/slidev-theme-scholarly)
-[![License](https://img.shields.io/github/license/jxpeng98/slidev-theme-scholarly)](./LICENSE)
+<p align="center">
+  <a href="https://www.npmjs.com/package/slidev-theme-scholarly">
+    <img alt="NPM Version" src="https://img.shields.io/npm/v/slidev-theme-scholarly?style=for-the-badge&logo=npm&color=1F4E79" />
+  </a>
+  <a href="https://www.npmjs.com/package/slidev-theme-scholarly">
+    <img alt="NPM Downloads" src="https://img.shields.io/npm/dm/slidev-theme-scholarly?style=for-the-badge&logo=npm&label=downloads&color=355C7D" />
+  </a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=jxpeng98.slidev-scholarly-snippets">
+    <img alt="VS Code Extension Version" src="https://img.shields.io/visual-studio-marketplace/v/jxpeng98.slidev-scholarly-snippets?style=for-the-badge&label=VS%20Code%20Extension&logo=visualstudiocode&color=2E5A88&cacheSeconds=86400" />
+  </a>
+  <a href="https://www.npmjs.com/package/slidev-theme-scholarly/v/next">
+    <img alt="NPM Next" src="https://img.shields.io/npm/v/slidev-theme-scholarly/next?style=for-the-badge&label=pre-release&logo=npm&color=5C6B73" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/jxpeng98/slidev-theme-scholarly/issues">
+    <img alt="GitHub issues" src="https://img.shields.io/github/issues/jxpeng98/slidev-theme-scholarly?style=for-the-badge&logo=github&label=issues&color=4B5563" />
+  </a>
+  <a href="https://github.com/jxpeng98/slidev-theme-scholarly/pulls">
+    <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/jxpeng98/slidev-theme-scholarly?style=for-the-badge&logo=github&label=pull%20requests&color=4B5563" />
+  </a>
+  <a href="https://github.com/jxpeng98/slidev-theme-scholarly">
+    <img alt="GitHub stars" src="https://img.shields.io/github/stars/jxpeng98/slidev-theme-scholarly?style=for-the-badge&logo=github&label=stars&color=374151" />
+  </a>
+  <a href="./LICENSE">
+    <img alt="License" src="https://img.shields.io/github/license/jxpeng98/slidev-theme-scholarly?style=for-the-badge&label=license&color=4B5563" />
+  </a>
+</p>
 
 [English](./README.md) · [在线演示](https://scholarly.jxpeng.dev/) · [文档](https://scholarly-docs.jxpeng.dev/zh/)
 

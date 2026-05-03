@@ -1,6 +1,17 @@
 import * as vscode from 'vscode';
 import { LayoutsProvider, ComponentsProvider, TemplatesProvider, ThemesProvider, CliProvider } from './providers';
-import { insertSnippet, createNewPresentation, setColorTheme, setFontTheme, setColorMode, applyThemePreset, runCliAction, openCliActionMenu } from './commands';
+import {
+  insertSnippet,
+  createNewPresentation,
+  setColorTheme,
+  setFontTheme,
+  setColorMode,
+  applyThemePreset,
+  runCliAction,
+  openCliActionMenu,
+  insertInternalAnchor,
+  insertAnchorReference
+} from './commands';
 import { AnchorCompletionProvider, BibCompletionProvider, BibHoverProvider, BibTreeProvider } from './bibtex';
 import { registerPreviewCommand, registerPreviewView } from './preview';
 import { ScholarlyCompletionProvider } from './snippetCompletion';
@@ -166,6 +177,12 @@ export function activate(context: vscode.ExtensionContext) {
     ),
     vscode.commands.registerCommand('slidev-scholarly.insertCitation', () =>
       insertCitationDialog()
+    ),
+    vscode.commands.registerCommand('slidev-scholarly.insertInternalAnchor', () =>
+      insertInternalAnchor()
+    ),
+    vscode.commands.registerCommand('slidev-scholarly.insertAnchorReference', () =>
+      insertAnchorReference()
     ),
     vscode.commands.registerCommand('slidev-scholarly.insertBibKey', (key: string) => {
       if (!key) {

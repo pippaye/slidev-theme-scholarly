@@ -1,6 +1,6 @@
 import { slides } from '#slidev/slides'
 import type { SlideRoute } from '@slidev/types'
-import { nextTick } from 'vue'
+import { nextTick, readonly, ref } from 'vue'
 import type { LocationQueryRaw, RouteLocationNormalized, Router } from 'vue-router'
 
 const BIBLIOGRAPHY_MARKER = '[[bibliography]]'
@@ -65,10 +65,7 @@ type AnchorNavigationState = {
   history: AnchorSnapshot[]
   initialized: boolean
   pending: PendingAnchorFocus | null
-  positionRaf: number | null
   registry: Map<string, string | number>
-  returnButton: HTMLButtonElement | null
-  returnTarget: HTMLElement | null
   router: Router | null
 }
 
@@ -77,12 +74,13 @@ const state: AnchorNavigationState = {
   history: [],
   initialized: false,
   pending: null,
-  positionRaf: null,
   registry: new Map(),
-  returnButton: null,
-  returnTarget: null,
   router: null,
 }
+
+const internalAnchorReturnAvailableState = ref(false)
+
+export const internalAnchorReturnAvailable = readonly(internalAnchorReturnAvailableState)
 
 const getEventElement = (target: EventTarget | null): Element | null => {
   if (target instanceof Element)
@@ -383,65 +381,6 @@ const clearHighlight = () => {
   })
 }
 
-const clamp = (value: number, min: number, max: number): number => {
-  return Math.min(Math.max(value, min), max)
-}
-
-const cancelReturnButtonPosition = () => {
-  if (typeof window === 'undefined' || state.positionRaf === null)
-    return
-
-  window.cancelAnimationFrame(state.positionRaf)
-  state.positionRaf = null
-}
-
-const positionReturnButton = () => {
-  const button = state.returnButton
-  const target = state.returnTarget
-  if (!button || button.hidden || !target || !document.contains(target))
-    return
-
-  const viewportPadding = 12
-  const gap = 10
-
-  button.style.visibility = 'hidden'
-  button.style.left = `${viewportPadding}px`
-  button.style.top = `${viewportPadding}px`
-
-  const buttonRect = button.getBoundingClientRect()
-  const targetRect = target.getBoundingClientRect()
-
-  let top = targetRect.top - buttonRect.height - gap
-  if (top < viewportPadding)
-    top = targetRect.bottom + gap
-  if (top + buttonRect.height > window.innerHeight - viewportPadding)
-    top = clamp(targetRect.top + gap, viewportPadding, window.innerHeight - buttonRect.height - viewportPadding)
-
-  let left = targetRect.right - buttonRect.width
-  if (left < viewportPadding)
-    left = targetRect.left + gap
-  if (left + buttonRect.width > window.innerWidth - viewportPadding)
-    left = window.innerWidth - buttonRect.width - viewportPadding
-
-  left = clamp(left, viewportPadding, window.innerWidth - buttonRect.width - viewportPadding)
-  top = clamp(top, viewportPadding, window.innerHeight - buttonRect.height - viewportPadding)
-
-  button.style.left = `${Math.round(left)}px`
-  button.style.top = `${Math.round(top)}px`
-  button.style.visibility = 'visible'
-}
-
-const scheduleReturnButtonPosition = () => {
-  if (typeof window === 'undefined' || !state.returnButton || state.returnButton.hidden || !state.returnTarget)
-    return
-
-  cancelReturnButtonPosition()
-  state.positionRaf = window.requestAnimationFrame(() => {
-    state.positionRaf = null
-    positionReturnButton()
-  })
-}
-
 const highlightElement = (element: HTMLElement) => {
   if (typeof window === 'undefined')
     return
@@ -460,11 +399,6 @@ const highlightElement = (element: HTMLElement) => {
     inline: 'nearest',
   })
   element.focus({ preventScroll: true })
-
-  if (state.history.length > 0) {
-    state.returnTarget = element
-    scheduleReturnButtonPosition()
-  }
 
   state.highlightTimer = window.setTimeout(() => {
     element.removeAttribute(INTERNAL_TARGET_ATTR)
@@ -557,21 +491,7 @@ const createSnapshot = (
 }
 
 const updateReturnButton = () => {
-  const button = state.returnButton
-  if (!button)
-    return
-
-  const isHidden = state.history.length === 0
-  button.hidden = isHidden
-
-  if (isHidden) {
-    state.returnTarget = null
-    cancelReturnButtonPosition()
-    button.style.visibility = 'hidden'
-    return
-  }
-
-  scheduleReturnButtonPosition()
+  internalAnchorReturnAvailableState.value = state.history.length > 0
 }
 
 const setPendingFromSnapshot = (snapshot: AnchorSnapshot) => {
@@ -710,45 +630,26 @@ const resolveTargetRouteSegment = (targetId: string): string | number | undefine
   return routeSegment
 }
 
-const ensureReturnButton = () => {
-  if (typeof document === 'undefined')
-    return null
+export const goBackToAnchorSource = async () => {
+  const router = state.router
+  const snapshot = state.history.pop()
+  updateReturnButton()
 
-  if (state.returnButton)
-    return state.returnButton
+  if (!router || !snapshot)
+    return
 
-  const button = document.createElement('button')
-  button.type = 'button'
-  button.className = 'scholarly-anchor-return'
-  button.textContent = 'Back to source'
-  button.hidden = true
-  button.setAttribute('aria-label', 'Back to previous anchor location')
+  setPendingFromSnapshot(snapshot)
 
-  button.addEventListener('click', async () => {
-    const router = state.router
-    const snapshot = state.history.pop()
-    updateReturnButton()
+  if (isSameLocation(router.currentRoute.value, snapshot)) {
+    await resolvePendingInternalAnchorNavigation(router.currentRoute.value)
+    return
+  }
 
-    if (!router || !snapshot)
-      return
-
-    setPendingFromSnapshot(snapshot)
-
-    if (isSameLocation(router.currentRoute.value, snapshot)) {
-      await resolvePendingInternalAnchorNavigation(router.currentRoute.value)
-      return
-    }
-
-    await router.push({
-      hash: snapshot.hash || undefined,
-      path: snapshot.path,
-      query: { ...snapshot.query },
-    })
+  await router.push({
+    hash: snapshot.hash || undefined,
+    path: snapshot.path,
+    query: { ...snapshot.query },
   })
-
-  document.body.appendChild(button)
-  state.returnButton = button
-  return button
 }
 
 const resolveFocusRequest = async (route: RouteLocationNormalized, pending: PendingAnchorFocus) => {
@@ -844,7 +745,6 @@ export const initializeInternalAnchorNavigation = (router: Router) => {
   globalWindow.__scholarlyAnchorNavigationCleanup?.()
 
   state.router = router
-  ensureReturnButton()
   rebuildInternalAnchorTargets()
 
   const handleClick = async (event: MouseEvent) => {
@@ -870,29 +770,18 @@ export const initializeInternalAnchorNavigation = (router: Router) => {
     void navigateToInternalTarget(anchor, router)
   }
 
-  const handleViewportChange = () => {
-    scheduleReturnButtonPosition()
-  }
-
   const cleanup = () => {
     document.removeEventListener('click', handleClick, true)
-    document.removeEventListener('scroll', handleViewportChange, true)
-    window.removeEventListener('resize', handleViewportChange)
     clearHighlight()
-    cancelReturnButtonPosition()
-    state.returnButton?.remove()
-    state.returnButton = null
-    state.returnTarget = null
     state.history = []
     state.pending = null
     state.registry.clear()
     state.initialized = false
     state.router = null
+    internalAnchorReturnAvailableState.value = false
   }
 
   document.addEventListener('click', handleClick, true)
-  document.addEventListener('scroll', handleViewportChange, true)
-  window.addEventListener('resize', handleViewportChange)
 
   globalWindow.__scholarlyAnchorNavigationCleanup = cleanup
   state.initialized = true

@@ -4,22 +4,34 @@ title: Home
 
 # Slidev Theme Scholarly
 
-<div class="flex flex-col items-center space-y-2 mb-4 md:flex-row md:space-y-0 md:space-x-4">
-  <div>
-    <a href="https://www.npmjs.com/package/slidev-theme-scholarly" target="_blank">
-      <img src="https://img.shields.io/npm/v/slidev-theme-scholarly?color=3AB9D4&label=" alt="NPM version">
-    </a>
-  </div>
-  <div>
-    <a href="https://github.com/jxpeng98/slidev-theme-scholarly" target="_blank">
-      <img src="https://img.shields.io/github/stars/jxpeng98/slidev-theme-scholarly?style=social" alt="GitHub stars">
-    </a>
-  </div>
-  <div>
-    <a href="https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/LICENSE" target="_blank">
-      <img src="https://img.shields.io/github/license/jxpeng98/slidev-theme-scholarly" alt="License">
-    </a>
-  </div>
+<div class="flex flex-wrap items-center justify-center gap-2 mb-2">
+  <a href="https://www.npmjs.com/package/slidev-theme-scholarly" target="_blank">
+    <img src="https://img.shields.io/npm/v/slidev-theme-scholarly?style=for-the-badge&logo=npm&color=1F4E79" alt="NPM Version">
+  </a>
+  <a href="https://www.npmjs.com/package/slidev-theme-scholarly" target="_blank">
+    <img src="https://img.shields.io/npm/dm/slidev-theme-scholarly?style=for-the-badge&logo=npm&label=downloads&color=355C7D" alt="NPM Downloads">
+  </a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=jxpeng98.slidev-scholarly-snippets" target="_blank">
+    <img src="https://img.shields.io/visual-studio-marketplace/v/jxpeng98.slidev-scholarly-snippets?style=for-the-badge&label=VS%20Code%20Extension&logo=visualstudiocode&color=2E5A88&cacheSeconds=86400" alt="VS Code Extension Version">
+  </a>
+  <a href="https://www.npmjs.com/package/slidev-theme-scholarly/v/next" target="_blank">
+    <img src="https://img.shields.io/npm/v/slidev-theme-scholarly/next?style=for-the-badge&label=pre-release&logo=npm&color=5C6B73" alt="NPM Next">
+  </a>
+</div>
+
+<div class="flex flex-wrap items-center justify-center gap-2 mb-4">
+  <a href="https://github.com/jxpeng98/slidev-theme-scholarly/issues" target="_blank">
+    <img src="https://img.shields.io/github/issues/jxpeng98/slidev-theme-scholarly?style=for-the-badge&logo=github&label=issues&color=4B5563" alt="GitHub issues">
+  </a>
+  <a href="https://github.com/jxpeng98/slidev-theme-scholarly/pulls" target="_blank">
+    <img src="https://img.shields.io/github/issues-pr/jxpeng98/slidev-theme-scholarly?style=for-the-badge&logo=github&label=pull%20requests&color=4B5563" alt="GitHub pull requests">
+  </a>
+  <a href="https://github.com/jxpeng98/slidev-theme-scholarly" target="_blank">
+    <img src="https://img.shields.io/github/stars/jxpeng98/slidev-theme-scholarly?style=for-the-badge&logo=github&label=stars&color=374151" alt="GitHub stars">
+  </a>
+  <a href="https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/LICENSE" target="_blank">
+    <img src="https://img.shields.io/github/license/jxpeng98/slidev-theme-scholarly?style=for-the-badge&label=license&color=4B5563" alt="License">
+  </a>
 </div>
 
 A professional presentation theme for [Slidev](https://sli.dev), designed specifically for academic presentations with LaTeX Beamer-inspired styling.
