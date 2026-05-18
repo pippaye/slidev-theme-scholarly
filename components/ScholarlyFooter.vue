@@ -10,6 +10,24 @@
         >
           <BeamerNavControls />
           <FooterTocControl />
+          <button
+            v-if="internalAnchorReturnAvailable"
+            type="button"
+            class="beamer-nav-button beamer-nav-button-return"
+            :title="backToSourceLabel"
+            :aria-label="backToSourceLabel"
+            @click="void goBackToAnchorSource()"
+          >
+            <svg
+              class="beamer-nav-icon beamer-nav-icon-return"
+              viewBox="0 0 16 16"
+              aria-hidden="true"
+            >
+              <path d="M6.25 5.25L3.5 8L6.25 10.75" />
+              <path d="M4 8H9.25C11.32 8 13 9.68 13 11.75V12" />
+            </svg>
+            <span class="beamer-nav-button-label">{{ backToSourceLabel }}</span>
+          </button>
           <span
             class="beamer-footer-page"
             :style="pageNumberStyle"
@@ -40,6 +58,7 @@ import { useSlideContext } from '@slidev/client'
 import BeamerNavControls from './BeamerNavControls.vue'
 import FooterTocControl from './FooterTocControl.vue'
 import { isInteractiveSlideRoute, isPrintExportRoute } from '../utils/presentationMode'
+import { goBackToAnchorSource, internalAnchorReturnAvailable } from '../utils/internalAnchorNavigation'
 
 interface Author {
   name?: string
@@ -58,6 +77,8 @@ const { $slidev } = useSlideContext()
 const slidevConfigs = computed(() => ($slidev.configs as any) || {})
 const showInteractiveControls = computed(() => isInteractiveSlideRoute())
 const showStaticPageNumber = computed(() => isPrintExportRoute())
+const isChinese = computed(() => `${slidevConfigs.value?.lang || ''}`.toLowerCase().startsWith('zh'))
+const backToSourceLabel = computed(() => isChinese.value ? '返回来源' : 'Back to source')
 const pageNumberStyle = computed(() => {
   const totalDigits = Math.max(String($slidev.nav.total || 0).length, 1)
   return {

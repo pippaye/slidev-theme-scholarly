@@ -6,6 +6,7 @@ import {
   THEME_PRESETS,
   THEME_PRESET_IDS
 } from './sharedData';
+import { parseAnchorTargets, type AnchorTarget } from './bibtex';
 
 type ThemeConfigUpdate = {
   colorTheme?: string
@@ -52,6 +53,129 @@ export function insertSnippet(snippet: string) {
   }
 
   editor.insertSnippet(new vscode.SnippetString(snippet));
+}
+
+function getActiveMarkdownEditor(): vscode.TextEditor | undefined {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showWarningMessage('No active editor found');
+    return undefined;
+  }
+
+  if (editor.document.languageId !== 'markdown') {
+    vscode.window.showWarningMessage('Open a Markdown file to use Slidev Scholarly anchor tools');
+    return undefined;
+  }
+
+  return editor;
+}
+
+function normalizeAnchorId(value: string): string {
+  return value.trim().replace(/^#+/, '');
+}
+
+function validateAnchorId(value: string): string | null {
+  const normalized = normalizeAnchorId(value);
+  if (!normalized)
+    return 'Anchor id cannot be empty';
+
+  if (!/^[A-Za-z0-9][\w:.-]*$/.test(normalized))
+    return 'Use letters, numbers, hyphens, underscores, colons, or periods';
+
+  return null;
+}
+
+function getAnchorSyntaxLabel(syntax: AnchorTarget['syntax']): string {
+  switch (syntax) {
+    case 'heading':
+      return 'Heading anchor';
+    case 'anchor':
+      return 'Standalone anchor';
+    case 'named-anchor':
+      return 'Named anchor';
+    default:
+      return 'HTML id';
+  }
+}
+
+export async function insertInternalAnchor(): Promise<void> {
+  if (!getActiveMarkdownEditor())
+    return;
+
+  const rawAnchorId = await vscode.window.showInputBox({
+    prompt: 'Enter internal anchor id',
+    placeHolder: 'appendix-proof',
+    value: 'anchor-id',
+    validateInput: validateAnchorId
+  });
+
+  if (!rawAnchorId)
+    return;
+
+  const anchorId = normalizeAnchorId(rawAnchorId);
+  const selected = await vscode.window.showQuickPick(
+    [
+      {
+        label: 'Standalone anchor',
+        description: '::anchor{#id}',
+        detail: 'Insert a dedicated anchor marker on its own line',
+        snippet: `::anchor{#${anchorId}}$0`
+      },
+      {
+        label: 'Heading suffix',
+        description: '{#id}',
+        detail: 'Append an id suffix to the current heading text',
+        snippet: ` {#${anchorId}}$0`
+      },
+      {
+        label: 'HTML id attribute',
+        description: 'id="id"',
+        detail: 'Insert an HTML/Vue id attribute at the cursor',
+        snippet: `id="${anchorId}"$0`
+      }
+    ],
+    {
+      placeHolder: 'Select how to insert the internal anchor',
+      matchOnDescription: true,
+      matchOnDetail: true
+    }
+  );
+
+  if (!selected)
+    return;
+
+  insertSnippet(selected.snippet);
+}
+
+export async function insertAnchorReference(): Promise<void> {
+  const editor = getActiveMarkdownEditor();
+  if (!editor)
+    return;
+
+  const anchors = parseAnchorTargets(editor.document);
+  if (anchors.length === 0) {
+    vscode.window.showInformationMessage('No internal anchors found in the current document');
+    return;
+  }
+
+  const selected = await vscode.window.showQuickPick(
+    anchors.map(anchor => ({
+      label: `#${anchor.id}`,
+      description: `${getAnchorSyntaxLabel(anchor.syntax)} · line ${anchor.line + 1}`,
+      detail: anchor.label,
+      anchor
+    })),
+    {
+      placeHolder: 'Select an internal anchor to insert as a reference',
+      matchOnDescription: true,
+      matchOnDetail: true
+    }
+  );
+
+  if (!selected)
+    return;
+
+  insertSnippet(`#${selected.anchor.id}`);
 }
 
 export async function createNewPresentation(template?: string) {

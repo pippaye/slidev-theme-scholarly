@@ -1,5 +1,7 @@
 import { defineConfig } from 'vitepress'
 import { withSidebar } from 'vitepress-sidebar';
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 // https://vitepress.dev/reference/site-config
 
@@ -115,9 +117,11 @@ const vitePressOptions = {
   }
 }
 
+const documentRootPath = existsSync(resolve(process.cwd(), 'en')) ? '.' : 'docs';
+
 const commonSidebarOptions = {
   // vitepress-sidebar expects a path relative to `process.cwd()`
-  documentRootPath: 'docs',
+  documentRootPath,
   useTitleFromFrontmatter: true,
   frontmatterTitleFieldName: 'title',
   collapsed: true,
